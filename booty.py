@@ -6,7 +6,7 @@ plt.ion()
 from multiprocessing import Pool  
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument('-homedir',action='store',dest='homedir',default='/Users/maxwell/Dropbox/Bertolero_Bassett_Projects/bootstrap/')
+parser.add_argument('-homedir',action='store',dest='homedir',default='/Users/maxwell/Documents/GitHub/bootstrap')
 parser.add_argument('-data',action='store',dest='data',default='msc')
 parser.add_argument('-parcels',action='store',dest='parcels',default='custom')
 r = parser.parse_args()
@@ -69,11 +69,13 @@ def all_error_bars():
 		multi_error_bars(n_timepoints)
 
 def plot_error_bars():
+	sns.set(style='white',font='Palatino')
 	cols = columns=['subject','timepoints','error']
 	plot_df = pd.DataFrame(columns=cols)
 	for n_timepoints in all_n_timepoints:
 		for subject in subjects:
-			results = np.load('/%s/results/errorbars_%s_%s_%s.npy'%(homedir,subject,n_timepoints,parcels))[1]
+			try:results = np.load('/%s/results/errorbars_%s_%s_%s.npy'%(homedir,subject,n_timepoints,parcels))[1]
+			except:continue
 			triu_indices = np.triu_indices(results.shape[0],1)
 			df = pd.DataFrame(columns=cols)
 			df['error'] = results[triu_indices]
